@@ -2,7 +2,7 @@
 #include <GameObject.h>
 #include <SDL.h>
 #include <math.h>
-//#include <SDL_image.h>
+#include <SDL_image.h>
 
 // Initializing our static member pointer.
 GameEngine* GameEngine::_instance = nullptr;
@@ -31,6 +31,9 @@ void Game::InitializeImpl()
   
   _player1 = new Player();
   _objects.push_back(_player1);
+
+  _player2 = new Player();
+  _objects.push_back(_player2);
 //  _objects.push_back(_wall);
 
   for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
@@ -46,6 +49,22 @@ void Game::UpdateImpl(float dt)
 {
   SDL_Event evt;
   SDL_PollEvent(&evt);
+
+  if (evt.type == SDL_KEYDOWN) {
+		SDL_KeyboardEvent &keyboardEvt = evt.key;
+		SDL_Keycode &keyCode = keyboardEvt.keysym.sym;			//key symbols
+		switch(keyCode) {
+			case SDLK_UP: case SDLK_DOWN: SDLK_LEFT: case SDLK_RIGHT:
+				_player2 -> move(dt, keyCode);
+				break;
+			case SDLK_w: case SDLK_s: SDLK_a: case SDLK_d:
+				_player1 -> move(dt, keyCode);
+				break;
+			default:
+				break;
+		}
+  }
+
 
   for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
   {

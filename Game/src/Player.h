@@ -48,7 +48,12 @@ public:
 	*/
 	~Player();
 
-	int rice;
+
+	void move(float dt, SDL_Keycode key);
+
+	SDL_Point face;
 	SDL_Texture *_avatar;
+	int avatarW, avatarH;
+	float speed, rotationSpeed;
 
 };
