@@ -69,17 +69,20 @@ void Player::Draw(SDL_Renderer *renderer, float dt) {
 
 //	face.x = _transform.position.x + avatarW/2; 
 //	face.y = _transform.position.y;
-	face.x = rotatedOffset.x;
-	face.y = rotatedOffset.y;
+	face.x = transformedEndPoint.x;
+	face.y = transformedEndPoint.y;
 
 }
 
 
 void Player::move(float dt, SDL_Keycode key) {
 	printf("X: %f, Y: %f\n", _transform.position.x, _transform.position.y);
-	printf("fX: %d, fY: %d\n", face.x, face.y);
+//	printf("fX: %d, fY: %d\n", face.x, face.y);
 //	int x = fmod(_transform.position.x, avatarW);
 //	int y = fmod(_transform.position.y, avatarH);
+	int x = face.x % avatarW; int y = face.y % avatarH;
+
+	printf("fX: %d, fY: %d\n", x, y);
 
 	switch(key) {
 		case SDLK_LEFT: case SDLK_a:
@@ -90,7 +93,7 @@ void Player::move(float dt, SDL_Keycode key) {
 			_transform.rotation.z -= (rotationSpeed * dt);
 			break;
 		case SDLK_UP: case SDLK_w:
-	/*		if (y < avatarH/2 && x < avatarW/2) {
+			if (y < avatarH/2 && x < avatarW/2) {
 				_transform.position.x -= (speed * dt);
 				_transform.position.y -= (speed * dt);
 			} else if (y < avatarH/2 && x == avatarW/2) {
@@ -111,8 +114,8 @@ void Player::move(float dt, SDL_Keycode key) {
 			} else if (y == avatarH/2 && x < avatarW/2) {
 				_transform.position.x -= (speed * dt);
 			}
-	*/	
-			_transform.position.y -= (speed * dt);
+		
+	//		_transform.position.y -= (speed * dt);
 			break;
 		case SDLK_DOWN: case SDLK_s:
 			_transform.position.y += (speed * dt);
