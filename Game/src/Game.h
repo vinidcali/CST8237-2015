@@ -1,6 +1,9 @@
 #pragma once
 
 #include <GameEngine.h>
+#include <SDL_image.h>
+#include "Player.h"
+#include "Wall.h"
 
 union SDL_Event;
 
@@ -20,4 +23,8 @@ protected:
 
   void Reset();
   void CalculateDrawOrder(std::vector<GameObject *>& drawOrder);
+
+  Player *_player1, *_player2;
+  Wall *_wall;
+//  SDL_Texture *_banana;
 };

@@ -16,10 +16,20 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Wall.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Wall.h" />
   </ItemGroup>
 </Project>

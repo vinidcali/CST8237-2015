@@ -2,7 +2,7 @@
 #include <GameObject.h>
 #include <SDL.h>
 #include <math.h>
-#include <SDL_image.h>
+//#include <SDL_image.h>
 
 // Initializing our static member pointer.
 GameEngine* GameEngine::_instance = nullptr;
@@ -29,10 +29,16 @@ void Game::InitializeImpl()
 {
   SDL_SetWindowTitle(_window, "Game");
 
+//  _objects.push_back(_player1);
+  _objects.push_back(_wall);
+
   for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
   {
     (*itr)->Initialize(_renderer);
   }
+  
+ // IMG_Init(IMG_INIT_PNG);						//initalizes the kind of image we will use
+  //_banana = IMG_LoadTexture(_renderer, "./banana.png");		//loads the image
 }
 
 void Game::UpdateImpl(float dt)
@@ -55,6 +61,16 @@ void Game::DrawImpl(SDL_Renderer *renderer, float dt)
   {
     (*itr)->Draw(renderer, dt);
   }
+
+/*  int w, h, winW, winH;
+	SDL_QueryTexture(_banana, NULL, NULL, &w, &h);
+	SDL_GetWindowSize(_window, &winW, &winH);
+
+	SDL_Rect r;
+	r.h = h; r.w = w; r.x = winW/2 - w/2; r.y = winH/2 - h/2;
+	
+	SDL_RenderCopy(renderer, _banana, NULL, &r);
+*/
 }
 
 void Game::CalculateDrawOrder(std::vector<GameObject *>& drawOrder)
