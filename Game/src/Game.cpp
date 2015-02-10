@@ -28,9 +28,10 @@ Game::~Game()
 void Game::InitializeImpl()
 {
   SDL_SetWindowTitle(_window, "Game");
-
-//  _objects.push_back(_player1);
-  _objects.push_back(_wall);
+  
+  _player1 = new Player();
+  _objects.push_back(_player1);
+//  _objects.push_back(_wall);
 
   for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
   {

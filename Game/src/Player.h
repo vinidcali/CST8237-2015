@@ -19,7 +19,7 @@ public:
 	 * \brief	Function inherited from GameObject. It is used to set initial values and run initalizing routines
 	 *			before the object is used elsewhere.
 	 */
-	void Initialize();
+	void Initialize(SDL_Renderer *renderer);
 
 	/**
 	 * \fn		void Player::Update(float dt)

@@ -14,7 +14,7 @@ Player::~Player() {
 
 }
 
-void Player::Initialize() {
+void Player::Initialize(SDL_Renderer *renderer) {
 /*	srand(time(NULL));
 	
 	_transform.position.x = ((float(rand()) / float(RAND_MAX)) * (640 - -640)) + -640;
@@ -30,7 +30,7 @@ void Player::Initialize() {
 	_transform.rotation.x = 30.0f;
 	_transform.rotation.y = 0.0f;
 	_transform.rotation.z = 10.0f;
-//	IMG_Init(IMG_INIT_PNG);						//initalizes the kind of image we will use
+	IMG_Init(IMG_INIT_PNG);						//initalizes the kind of image we will use
 	
 }
 
@@ -39,7 +39,7 @@ void Player::Update(float dt) {
 }
 
 void Player::Draw(SDL_Renderer *renderer, float dt) {
-/*	_avatar = IMG_LoadTexture(renderer, "./banana.png");		//loads the image
+	_avatar = IMG_LoadTexture(renderer, "./banana.png");		//loads the image
 
 	  int w, h, winW, winH;
 	SDL_QueryTexture(_avatar, NULL, NULL, &w, &h);
@@ -49,7 +49,7 @@ void Player::Draw(SDL_Renderer *renderer, float dt) {
 	r.h = h; r.w = w; r.x = 200; r.y = 200;
 	
 	SDL_RenderCopy(renderer, _avatar, NULL, &r);
-*/	
+	
 	_transform.rotation.z += _transform.rotation.z >= 360.0f ? -360.0f : 0;		//well, cant have more than 360 degrees, right?
 	_transform.position.x += _transform.position.x >= 640 ? -640 : (_transform.position.x <= 0 ? 640 : 0);
 	_transform.position.y += _transform.position.y >= 640 ? -640 : (_transform.position.y <= 0 ? 640 : 0);
