@@ -32,7 +32,7 @@ protected:
   void CalculateDrawOrder(std::vector<GameObject *>& drawOrder);
 
   Player *_player1, *_player2;
-  Wall *_wall;
+  std::vector<Wall *> _walls;
 //  SDL_Texture *_banana;
 
 

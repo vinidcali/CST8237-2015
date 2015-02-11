@@ -2,6 +2,7 @@
 #include <GameObject.h>
 #include <SDL.h>
 #include <math.h>
+#include <time.h>
 #include <SDL_image.h>
 #include <Box2D\Box2D.h>
 
@@ -28,22 +29,25 @@ Game::~Game()
 
 void Game::InitializeImpl()
 {
-  SDL_SetWindowTitle(_window, "Game");
+  SDL_SetWindowTitle(_window, "War of the Happy Bananas");
   
   _player1 = new Player();
   _objects.push_back(_player1);
 
   _player2 = new Player();
   _objects.push_back(_player2);
-//  _objects.push_back(_wall);
+
+   int i = rand() % 30;
+  for (i; i >= 0; i--) {
+	  _walls.push_back(new Wall());
+	  _objects.push_back(_walls.back());
+  }
+  
 
   for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
   {
     (*itr)->Initialize(_renderer);
   }
-  
- // IMG_Init(IMG_INIT_PNG);						//initalizes the kind of image we will use
-  //_banana = IMG_LoadTexture(_renderer, "./banana.png");		//loads the image
 
 
 //Initialize Box2D world
@@ -89,6 +93,22 @@ void Game::UpdateImpl(float dt)
   {
     (*itr)->Update(dt);
   }
+
+  SDL_Rect intersection;
+
+  if (SDL_IntersectRect(&_player1->avatarRect, &_player2->avatarRect, &intersection))  {
+	  _player1->collision(dt, intersection);
+	  _player2->collision(dt, intersection);
+  }
+
+    for (auto itr = _walls.begin(); itr != _walls.end(); itr++)
+  {
+	  if (SDL_IntersectRect(&_player1->avatarRect, &(*itr)->wallRect, &intersection))
+		  _player1->collision(dt, intersection);
+	  else if (SDL_IntersectRect(&_player2->avatarRect, &(*itr)->wallRect, &intersection))
+		  _player2->collision(dt, intersection);
+  }
+
 }
 
 void Game::DrawImpl(SDL_Renderer *renderer, float dt)
@@ -100,16 +120,6 @@ void Game::DrawImpl(SDL_Renderer *renderer, float dt)
   {
     (*itr)->Draw(renderer, dt);
   }
-
-/*  int w, h, winW, winH;
-	SDL_QueryTexture(_banana, NULL, NULL, &w, &h);
-	SDL_GetWindowSize(_window, &winW, &winH);
-
-	SDL_Rect r;
-	r.h = h; r.w = w; r.x = winW/2 - w/2; r.y = winH/2 - h/2;
-	
-	SDL_RenderCopy(renderer, _banana, NULL, &r);
-*/
 }
 
 void Game::CalculateDrawOrder(std::vector<GameObject *>& drawOrder)

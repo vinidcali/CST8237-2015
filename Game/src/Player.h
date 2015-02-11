@@ -51,8 +51,12 @@ public:
 
 	void move(float dt, SDL_Keycode key);
 
+	void collision(float dt, SDL_Rect intersc);
+
+
 	SDL_Point face;
 	SDL_Texture *_avatar;
+	SDL_Rect avatarRect;
 	int avatarW, avatarH;
 	float speed, rotationSpeed;
 

@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <SDL_image.h>
 #include <stdio.h>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
+
 
 
 Player::Player() : GameObject() {
@@ -21,12 +24,19 @@ void Player::Initialize(SDL_Renderer *renderer) {
 	avatarW = 50;
 	avatarH = 50;
 	
-	srand(time(NULL));
-	
-	_transform.position.x = ((float(rand()) / float(RAND_MAX)) * (640 - -640)) + -640;
-	_transform.position.y = ((float(rand()) / float(RAND_MAX)) * (640 - -640)) + -640;
 
-	 _transform.rotation.x = avatarW/2; _transform.rotation.y = 0; _transform.rotation.z = 0.0f;
+	//this way, when creating two players, because there's the sleep time,
+	//the players won't be in the same place, because there's a palpable time difference between one random and the other
+	srand(unsigned (time(NULL)));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	int r = rand();
+
+	_transform.position.x = float(rand()) / (float(RAND_MAX / 900));
+	_transform.position.y = float(rand()) / (float(RAND_MAX / 600));
+
+	 _transform.rotation.x = avatarW/2; _transform.rotation.y = 0;
+	 _transform.rotation.z = float(rand()) / (float(RAND_MAX / 360));;
 	
 	 face.x = _transform.position.x + avatarW/2; 
 	face.y = _transform.position.y;
@@ -42,8 +52,8 @@ void Player::Update(float dt) {
 
 void Player::Draw(SDL_Renderer *renderer, float dt) {
 	_transform.rotation.z += _transform.rotation.z >= 360.0f ? -360.0f : 0;		//well, cant have more than 360 degrees, right?
-	_transform.position.x += _transform.position.x >= 640 ? -640 : (_transform.position.x <= 0 ? 640 : 0);
-	_transform.position.y += _transform.position.y >= 640 ? -640 : (_transform.position.y <= 0 ? 640 : 0);
+	_transform.position.x += _transform.position.x >= 900 ? -900 : (_transform.position.x <= 0 ? 900 : 0);
+	_transform.position.y += _transform.position.y >= 600 ? -600 : (_transform.position.y <= 0 ? 600 : 0);
 
 	//magical stuff (aka math) takes place, so we can rotate, like the woooooooorld
 	float rotationRadians = MathUtils::ToRadians(_transform.rotation.z);
@@ -54,15 +64,14 @@ void Player::Draw(SDL_Renderer *renderer, float dt) {
 	};
 	Vector2 transformedEndPoint = {_transform.position.x + rotatedOffset.x, _transform.position.y + rotatedOffset.y };
 
-	SDL_Rect r;
-	r.h = avatarH; r.w = avatarW; r.x = _transform.position.x; r.y = _transform.position.y;
+	avatarRect.h = avatarH; avatarRect.w = avatarW; avatarRect.x = _transform.position.x; avatarRect.y = _transform.position.y;
 	
 	SDL_Point center;
-	center.x = r.w / 2;
-	center.y = r.h / 2;
+	center.x = avatarRect.w / 2;
+	center.y = avatarRect.h / 2;
 
 	//SDL_RenderCopy(renderer, _avatar, NULL, &r);
-	SDL_RenderCopyEx(renderer, _avatar, NULL, &r, _transform.rotation.z, &center, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, _avatar, NULL, &avatarRect, _transform.rotation.z, &center, SDL_FLIP_NONE);
 
 	face.x = transformedEndPoint.x;
 	face.y = transformedEndPoint.y;
@@ -90,34 +99,54 @@ void Player::move(float dt, SDL_Keycode key) {
 			if (y < 0 && x > 0) {					
 				_transform.position.x -= (speed * dt);
 				_transform.position.y -= (speed * dt);
-				printf("esquerda pra cima");
 			} else if (y == 0 && x == avatarW/2 - 1) {		
 				_transform.position.y -= (speed * dt);
-				printf(" pra cima");
 			} else if (y > 0 && x > 0) {			
 				_transform.position.x += (speed * dt);
 				_transform.position.y -= (speed * dt);
-				printf("direita pra cima");
 			} else if (y == avatarH/2 - 1 && x == 0) {				
 				_transform.position.x += (speed * dt);
-				printf("direita");
 			} else if (y > 0 && x < 0) {
 				_transform.position.x += (speed * dt);
 				_transform.position.y += (speed * dt);
-				printf("direita pra baixo");
 			} else if (y == 0 && x == -avatarW/2) {
 				_transform.position.y += (speed * dt);
-				printf("pra baixo");
 			} else if (y < 0 && x < 0) {
 				_transform.position.x -= (speed * dt);
 				_transform.position.y += (speed * dt);
-				printf("esquerda pra baixo");
 			} else if (y == -avatarH/2 && x == 0) {
 				_transform.position.x -= (speed * dt);
-				printf("esquerda ");
 			}
 			break;
 		default:
 			break;
+	}
+}
+
+
+void Player::collision(float dt, SDL_Rect intersc) {
+	int x = intersc.x - avatarW/2 - _transform.position.x;
+	int y = intersc.y - avatarH/2 - _transform.position.y;
+
+	if (y < 0 && x > 0) {					
+		_transform.position.x += (speed * dt);
+		_transform.position.y += (speed * dt);
+	} else if (y == 0 && x == avatarW/2 - 1) {		
+		_transform.position.y += (speed * dt);
+	} else if (y > 0 && x > 0) {			
+		_transform.position.x -= (speed * dt);
+		_transform.position.y += (speed * dt);
+	} else if (y == avatarH/2 - 1 && x == 0) {				
+		_transform.position.x -= (speed * dt);
+	} else if (y > 0 && x < 0) {
+		_transform.position.x -= (speed * dt);
+		_transform.position.y -= (speed * dt);
+	} else if (y == 0 && x == -avatarW/2) {
+		_transform.position.y -= (speed * dt);
+	} else if (y < 0 && x < 0) {
+		_transform.position.x += (speed * dt);
+		_transform.position.y -= (speed * dt);
+	} else if (y == -avatarH/2 && x == 0) {
+		_transform.position.x += (speed * dt);
 	}
 }

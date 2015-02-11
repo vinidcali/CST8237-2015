@@ -19,7 +19,7 @@ void GameEngine::Initialize()
 
   _window = SDL_CreateWindow("Engine",
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-    640, 640,
+    900, 600,
     SDL_WINDOW_SHOWN);
 
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
