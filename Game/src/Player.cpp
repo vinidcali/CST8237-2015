@@ -17,7 +17,7 @@ Player::~Player() {
 
 void Player::Initialize(SDL_Renderer *renderer) {
 	speed = 600;
-	rotationSpeed = 50000;
+	rotationSpeed = 2000;
 	avatarW = 50;
 	avatarH = 50;
 	
@@ -26,7 +26,7 @@ void Player::Initialize(SDL_Renderer *renderer) {
 	_transform.position.x = ((float(rand()) / float(RAND_MAX)) * (640 - -640)) + -640;
 	_transform.position.y = ((float(rand()) / float(RAND_MAX)) * (640 - -640)) + -640;
 
-	 _transform.rotation.x = avatarW/2; _transform.rotation.y = avatarH/2; _transform.rotation.z = 10.0f;
+	 _transform.rotation.x = avatarW/2; _transform.rotation.y = 0; _transform.rotation.z = 0.0f;
 	
 	 face.x = _transform.position.x + avatarW/2; 
 	face.y = _transform.position.y;
@@ -41,8 +41,6 @@ void Player::Update(float dt) {
 }
 
 void Player::Draw(SDL_Renderer *renderer, float dt) {
-
-	
 	_transform.rotation.z += _transform.rotation.z >= 360.0f ? -360.0f : 0;		//well, cant have more than 360 degrees, right?
 	_transform.position.x += _transform.position.x >= 640 ? -640 : (_transform.position.x <= 0 ? 640 : 0);
 	_transform.position.y += _transform.position.y >= 640 ? -640 : (_transform.position.y <= 0 ? 640 : 0);
@@ -58,67 +56,68 @@ void Player::Draw(SDL_Renderer *renderer, float dt) {
 
 	SDL_Rect r;
 	r.h = avatarH; r.w = avatarW; r.x = _transform.position.x; r.y = _transform.position.y;
-//	r.h = avatarH; r.w = avatarW; r.x = transformedEndPoint.x; r.y = transformedEndPoint.y;
 	
 	SDL_Point center;
 	center.x = r.w / 2;
 	center.y = r.h / 2;
 
 	//SDL_RenderCopy(renderer, _avatar, NULL, &r);
-	SDL_RenderCopyEx(renderer, _avatar, NULL, &r, rotationRadians, &center, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, _avatar, NULL, &r, _transform.rotation.z, &center, SDL_FLIP_NONE);
 
-//	face.x = _transform.position.x + avatarW/2; 
-//	face.y = _transform.position.y;
 	face.x = transformedEndPoint.x;
 	face.y = transformedEndPoint.y;
+
 
 }
 
 
 void Player::move(float dt, SDL_Keycode key) {
-	printf("X: %f, Y: %f\n", _transform.position.x, _transform.position.y);
-//	printf("fX: %d, fY: %d\n", face.x, face.y);
-//	int x = fmod(_transform.position.x, avatarW);
-//	int y = fmod(_transform.position.y, avatarH);
-	int x = face.x % avatarW; int y = face.y % avatarH;
-
-	printf("fX: %d, fY: %d\n", x, y);
-
+/*	printf("X: %f, Y: %f\n", _transform.position.x, _transform.position.y);
+	printf("fX: %d, fY: %d\n", face.x, face.y);
+		printf("z%f\n", _transform.rotation.z);
+*/	int x = face.x - _transform.position.x;
+	int y = face.y - _transform.position.y;
+//	printf("x: %d, y: %d\n\n", x, y);
 	switch(key) {
 		case SDLK_LEFT: case SDLK_a:
-			_transform.rotation.z += (rotationSpeed * dt);
+			_transform.rotation.z -= (rotationSpeed * dt);
 			printf("hello?");
 			break;
 		case SDLK_RIGHT: case SDLK_d:
-			_transform.rotation.z -= (rotationSpeed * dt);
+			_transform.rotation.z += (rotationSpeed * dt);
 			break;
-		case SDLK_UP: case SDLK_w:
-			if (y < avatarH/2 && x < avatarW/2) {
+		case SDLK_UP: case SDLK_w:	
+			if (y < 0 && x > 0) {					
 				_transform.position.x -= (speed * dt);
 				_transform.position.y -= (speed * dt);
-			} else if (y < avatarH/2 && x == avatarW/2) {
+				printf("esquerda pra cima");
+			} else if (y == 0 && x == avatarW/2 - 1) {		
 				_transform.position.y -= (speed * dt);
-			} else if (y < avatarH/2 && x > avatarW/2) {
+				printf(" pra cima");
+			} else if (y > 0 && x > 0) {			
 				_transform.position.x += (speed * dt);
 				_transform.position.y -= (speed * dt);
-			} else if (y == avatarH/2 && x > avatarW/2) {
+				printf("direita pra cima");
+			} else if (y == avatarH/2 - 1 && x == 0) {				
 				_transform.position.x += (speed * dt);
-			} else if (y > avatarH/2 && x > avatarW/2) {
+				printf("direita");
+			} else if (y > 0 && x < 0) {
 				_transform.position.x += (speed * dt);
 				_transform.position.y += (speed * dt);
-			} else if (y > avatarH/2 && x == avatarW/2) {
+				printf("direita pra baixo");
+			} else if (y == 0 && x == -avatarW/2) {
 				_transform.position.y += (speed * dt);
-			} else if (y > avatarH/2 && x < avatarW/2) {
+				printf("pra baixo");
+			} else if (y < 0 && x < 0) {
 				_transform.position.x -= (speed * dt);
 				_transform.position.y += (speed * dt);
-			} else if (y == avatarH/2 && x < avatarW/2) {
+				printf("esquerda pra baixo");
+			} else if (y == -avatarH/2 && x == 0) {
 				_transform.position.x -= (speed * dt);
+				printf("esquerda ");
 			}
-		
-	//		_transform.position.y -= (speed * dt);
 			break;
-		case SDLK_DOWN: case SDLK_s:
-			_transform.position.y += (speed * dt);
+		default:
 			break;
 	}
 }

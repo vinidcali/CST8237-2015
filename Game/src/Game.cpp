@@ -73,10 +73,10 @@ void Game::UpdateImpl(float dt)
 		SDL_KeyboardEvent &keyboardEvt = evt.key;
 		SDL_Keycode &keyCode = keyboardEvt.keysym.sym;			//key symbols
 		switch(keyCode) {
-			case SDLK_UP: case SDLK_DOWN: SDLK_LEFT: case SDLK_RIGHT:
+			case SDLK_UP: SDLK_LEFT: case SDLK_RIGHT:
 				_player2 -> move(dt, keyCode);
 				break;
-			case SDLK_w: case SDLK_s: SDLK_a: case SDLK_d:
+			case SDLK_w: SDLK_a: case SDLK_d:
 				_player1 -> move(dt, keyCode);
 				break;
 			default:
