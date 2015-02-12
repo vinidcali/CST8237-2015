@@ -38,7 +38,7 @@ void Player::Initialize(SDL_Renderer *renderer) {
 	 _transform.rotation.x = avatarW/2; _transform.rotation.y = 0;
 	 _transform.rotation.z = float(rand()) / (float(RAND_MAX / 360));;
 	
-	 face.x = _transform.position.x + avatarW/2; 
+	face.x = _transform.position.x + avatarW/2; 
 	face.y = _transform.position.y;
 
 	IMG_Init(IMG_INIT_PNG);						//initalizes the kind of image we will use

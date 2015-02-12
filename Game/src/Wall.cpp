@@ -40,5 +40,4 @@ void Wall::Draw(SDL_Renderer *renderer, float dt) {
 	wallRect.h = wallH; wallRect.w = wallW; wallRect.x = _transform.position.x; wallRect.y = _transform.position.y;
 
 	SDL_RenderCopy(renderer, _wall, NULL, &wallRect);
-
 }

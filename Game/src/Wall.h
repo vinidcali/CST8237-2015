@@ -1,8 +1,8 @@
 /**
- * \class Player
+ * \class Wall
  * \brief Inheriting from GameObject, represents the player in the game.
  * \author Vinícius de Carli
- * \date January 29, 2015
+ * \date February 12, 2015
  */
 
 #pragma once
@@ -15,21 +15,22 @@ class Wall : public GameObject {
 
 public:
 	/**
-	 * \fn		void Player::Initialize()
+	 * \fn		void Wall::Initialize(SDL_Renderer *renderer)
 	 * \brief	Function inherited from GameObject. It is used to set initial values and run initalizing routines
 	 *			before the object is used elsewhere.
+	 * \param	renderer	The SDL renderer used to draw the object.
 	 */
 	void Initialize(SDL_Renderer *renderer);
 
 	/**
-	 * \fn		void Player::Update(float dt)
+	 * \fn		void Wall::Update(float dt)
 	 * \brief	Function inherited from GameObject. It is used to update the object in every new game loop.
 	 * \param	dt			The time in fractions of a second since the last pass.
 	 */
 	void Update(float dt);
 
 	/**
-	 * \fn		void Player::Draw(SDL_Renderer *renderer, float dt)
+	 * \fn		void Wall::Draw(SDL_Renderer *renderer, float dt)
 	 * \brief	Function inherited from GameObject. It defines how the object is draw to the screen.
 	 * \param	renderer	The SDL renderer used to draw the object.
 	 * \param	dt			The time in fractions of a second since the last pass.
@@ -37,14 +38,14 @@ public:
 	void Draw(SDL_Renderer *renderer, float dt);
 
 	/**
-	* \fn		void Player::Player()
-	* \brief	Standard constructor for Player.
+	* \fn		void Wall::Wall()
+	* \brief	Standard constructor for Wall.
 	*/
 	Wall();
 
 	/**
-	* \fn		void Player::~Player()
-	* \brief	Standard deconstructor for Player.
+	* \fn		void Wall::~Wall()
+	* \brief	Standard deconstructor for Wall.
 	*/
 	~Wall();
 

@@ -2,7 +2,7 @@
  * \class Player
  * \brief Inheriting from GameObject, represents the player in the game.
  * \author Vinícius de Carli
- * \date January 29, 2015
+ * \date February 12, 2015
  */
 
 #pragma once
@@ -15,9 +15,10 @@ class Player : public GameObject {
 
 public:
 	/**
-	 * \fn		void Player::Initialize()
+	 * \fn		void Player::Initialize(SDL_Renderer *renderer)
 	 * \brief	Function inherited from GameObject. It is used to set initial values and run initalizing routines
 	 *			before the object is used elsewhere.
+	 * \param	renderer	The SDL renderer used to draw the object.
 	 */
 	void Initialize(SDL_Renderer *renderer);
 

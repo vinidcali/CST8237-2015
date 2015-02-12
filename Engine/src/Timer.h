@@ -1,3 +1,10 @@
+/**
+ * \class MathUtils
+ * \brief A time library to aid students during class work.
+ * \author Justin Wilkinson
+ * \date January, 2015
+ */
+
 #pragma once
 
 class Timer;

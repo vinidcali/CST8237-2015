@@ -1,3 +1,10 @@
+/**
+ * \class Game
+ * \brief Inheriting from GameEngine, represents the game environment.
+ * \author Vinícius de Carli
+ * \date February 12, 2015
+ */
+
 #pragma once
 
 #include <GameEngine.h>
@@ -19,21 +26,49 @@ class Game: public GameEngine
   friend class GameEngine;
 
 public:
+	/**
+	* \fn		void Game::~Game()
+	* \brief	Standard deconstructor for Game.
+	*/
   ~Game();
 
 protected:
-  Game();
+	/**
+	* \fn		void Game::Game()
+	* \brief	Standard constructor for Game.
+	*/
+	Game();
 
-  void InitializeImpl();
-  void UpdateImpl(float dt);
-  void DrawImpl(SDL_Renderer *renderer, float dt);
+	/**
+	 * \fn		void Game::InitializeImpl()
+	 * \brief	The virtual function inherited from GameEngine. It is used to set initial
+	 *			values and run initalizing routines.
+	 */
+	void InitializeImpl();
 
-  void Reset();
-  void CalculateDrawOrder(std::vector<GameObject *>& drawOrder);
+	/**
+	 * \fn		void Game::UpdateImpl(float dt)
+	 * \brief	The virtual function inherited from GameEngine. It is used to update the
+	 *			objects in the game while the program is running.
+	 * \param	dt			The time in fractions of a second since the last pass.
+	 */
+	void UpdateImpl(float dt);
 
-  Player *_player1, *_player2;
-  std::vector<Wall *> _walls;
-//  SDL_Texture *_banana;
+	/**
+	 * \fn		void Game::DrawImpl(SDL_Renderer *renderer, float dt)
+	 * \brief	The virtual function inherited from GameEngine. It is used to define how
+	 *			the objects in the game will be draw to the screen.
+	 * \param	renderer	The SDL renderer used to draw the object.
+	 * \param	dt			The time in fractions of a second since the last pass.
+	 */
+	void DrawImpl(SDL_Renderer *renderer, float dt);
+
+	void Reset();
+	void CalculateDrawOrder(std::vector<GameObject *>& drawOrder);
+
+
+	Player *_player1, *_player2;
+	std::vector<Wall *> _walls;
 
 
 	b2World *_world;

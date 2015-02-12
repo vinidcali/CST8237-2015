@@ -3,24 +3,18 @@
 #include <SDL_image.h>
 #include "MathUtils.h"
 
-GameEngine::GameEngine()
-{
+GameEngine::GameEngine() {
 
 }
 
-GameEngine::~GameEngine()
-{
+GameEngine::~GameEngine() {
 
 }
 
-void GameEngine::Initialize()
-{
+void GameEngine::Initialize() {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
 
-  _window = SDL_CreateWindow("Engine",
-    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-    900, 600,
-    SDL_WINDOW_SHOWN);
+  _window = SDL_CreateWindow("Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 600, SDL_WINDOW_SHOWN);
 
   _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -33,8 +27,7 @@ void GameEngine::Initialize()
   _engineTimer.Start();
 }
 
-void GameEngine::Shutdown()
-{
+void GameEngine::Shutdown() {
   /* Stop the engine timer as we're shutting down. */
   _engineTimer.Stop();
 
@@ -46,16 +39,14 @@ void GameEngine::Shutdown()
   SDL_Quit();
 }
 
-void GameEngine::Update()
-{
+void GameEngine::Update() {
   // Calculating the time difference since our last loop.
   _engineTimer.Update();
 
   UpdateImpl(_engineTimer.GetDeltaTime());
 }
 
-void GameEngine::Draw()
-{
+void GameEngine::Draw() {
   // Set the draw colour for screen clearing.
   SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 
