@@ -4,7 +4,9 @@
 #include <math.h>
 #include <time.h>
 #include <SDL_image.h>
+#include <sstream>
 #include <Box2D\Box2D.h>
+#include <SDL_mixer.h>
 
 
 GameEngine* GameEngine::_instance = nullptr;		//initializing static member pointer
@@ -17,7 +19,7 @@ GameEngine* GameEngine::CreateInstance() {
 }
 
 Game::Game() : GameEngine() {
-
+	_title = "War of The Happy Bananas   -|-   ";
 }
 
 Game::~Game() {
@@ -25,7 +27,10 @@ Game::~Game() {
 }
 
 void Game::InitializeImpl() {
-	SDL_SetWindowTitle(_window, "War of the Happy Bananas");
+	std::stringstream tempTitle;
+	tempTitle << _title << "~~~ LOADING! HANG ON IN THERE ~~~";
+
+	SDL_SetWindowTitle(_window, tempTitle.str().c_str());
   
 	_player1 = new Player();
 	_objects.push_back(_player1);
@@ -34,7 +39,7 @@ void Game::InitializeImpl() {
 	_objects.push_back(_player2);
 
 
-	int i = rand() % 20;
+	int i = 15 + (rand() % (int)(30 - 15 + 1));
 	for (i; i >= 0; i--) {
 		_walls.push_back(new Wall());
 		_objects.push_back(_walls.back());
@@ -45,6 +50,8 @@ void Game::InitializeImpl() {
 		(*itr)->Initialize(_renderer);
 
 
+/*
+BOX STUFF, NOT COMPLETE
 
 	//Initialize Box2D world
 	b2Vec2 gravity(0.0f, 1.0f);
@@ -61,6 +68,20 @@ void Game::InitializeImpl() {
 	boxShape.SetAsBox(5, 5);
 	_boxFixture = _boxBody->CreateFixture(&boxShape, 0.0f);		//fixes the shape inside the body
 //however, so far we dont have a visual representation to it yet, so we cant see anything
+*/
+
+	Mix_Init(MIX_INIT_MP3);
+
+	int success = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == 0;
+	if (success) {
+		_music = Mix_LoadMUS("./music.mp3");
+		if (_music != nullptr)
+			Mix_PlayMusic(_music, 1);
+	}
+
+	_sfx = Mix_LoadWAV("./erased.wav");
+	if (_sfx != nullptr)
+		Mix_PlayChannel(-1, _sfx, 0);
 
 }
 
@@ -72,12 +93,19 @@ void Game::UpdateImpl(float dt) {
 		SDL_KeyboardEvent &keyboardEvt = evt.key;
 		SDL_Keycode &keyCode = keyboardEvt.keysym.sym;			//key symbols
 		switch(keyCode) {
-			case SDLK_UP: SDLK_LEFT: case SDLK_RIGHT:
+			case SDLK_UP: case SDLK_LEFT: case SDLK_RIGHT:
 				_player2 -> move(dt, keyCode);
 				break;
-			case SDLK_w: SDLK_a: case SDLK_d:
+			case SDLK_w: case SDLK_a: case SDLK_d:
 				_player1 -> move(dt, keyCode);
 				break;
+			case SDLK_SPACE:
+				if (Mix_PausedMusic())
+					Mix_ResumeMusic();
+				else
+					Mix_PauseMusic();
+			case SDLK_r:
+				Mix_RewindMusic();
 			default:
 				break;
 		}
@@ -87,18 +115,23 @@ void Game::UpdateImpl(float dt) {
 	for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
 		(*itr)->Update(dt);
 
-	SDL_Rect intersection;
 
+	SDL_Rect intersection;
 	if (SDL_IntersectRect(&_player1->avatarRect, &_player2->avatarRect, &intersection))  {
 		_player1->collision(dt, intersection);
 		_player2->collision(dt, intersection);
 	}
-
 	for (auto itr = _walls.begin(); itr != _walls.end(); itr++)
 		if (SDL_IntersectRect(&_player1->avatarRect, &(*itr)->wallRect, &intersection))
 			_player1->collision(dt, intersection);
 		else if (SDL_IntersectRect(&_player2->avatarRect, &(*itr)->wallRect, &intersection))
 			_player2->collision(dt, intersection);
+
+
+
+	std::stringstream tempTitle;
+	tempTitle << _title << "P1: " << _player1->points << " VS P2: " << _player2->points;
+	SDL_SetWindowTitle(_window, tempTitle.str().c_str());
 
 }
 

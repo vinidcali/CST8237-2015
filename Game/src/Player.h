@@ -59,6 +59,7 @@ public:
 	SDL_Texture *_avatar;
 	SDL_Rect avatarRect;
 	int avatarW, avatarH;
+	int points;
 	float speed, rotationSpeed;
 
 };

@@ -23,6 +23,7 @@ void Player::Initialize(SDL_Renderer *renderer) {
 	rotationSpeed = 2000;
 	avatarW = 50;
 	avatarH = 50;
+	points = 0;
 	
 
 	//this way, when creating two players, because there's the sleep time,

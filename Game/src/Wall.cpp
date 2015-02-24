@@ -21,9 +21,9 @@ void Wall::Initialize(SDL_Renderer *renderer) {
 	wallH = 100;
 
 	//this way, when creating multiple walls, because there's the sleep time,
-	//the walls won't be in the same place, because there's a palpable time difference between one random and the other
+	//the walls won't be in the same place, at least this is the way I got it to work D:
 //	srand(time(NULL));
-	std::this_thread::sleep_for(std::chrono::milliseconds(200));
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 	_transform.position.x = float(rand()) / (float(RAND_MAX / 900));
 	_transform.position.y = float(rand()) / (float(RAND_MAX / 600));

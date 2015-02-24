@@ -21,6 +21,11 @@ class b2Body;				//a logical whole (like a car: it's made of 2 circles and a squ
 class b2Fixture;			//the shape bodies are made of
 
 
+struct _Mix_Music;			//compressed, long, large file -> stream
+struct Mix_Chunk;			//short, 
+
+
+
 class Game: public GameEngine
 {
   friend class GameEngine;
@@ -69,10 +74,13 @@ protected:
 
 	Player *_player1, *_player2;
 	std::vector<Wall *> _walls;
-
+	std::string _title;
 
 	b2World *_world;
 	b2Body *_boxBody;
 	b2Fixture *_boxFixture;
+
+	_Mix_Music* _music;
+	Mix_Chunk* _sfx;
 
 };
