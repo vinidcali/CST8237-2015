@@ -25,9 +25,9 @@ void Player::Initialize(SDL_Renderer *renderer) {
 	avatarH = 50;
 	points = 0;
 	
-
-	//this way, when creating two players, because there's the sleep time,
-	//the players won't be in the same place, because there's a palpable time difference between one random and the other
+	
+	//this way, when creating multiple walls, because there's the sleep time,
+	//the walls won't be in the same place, at least this is the way I got it to work D:
 	srand(unsigned (time(NULL)));
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -71,27 +71,20 @@ void Player::Draw(SDL_Renderer *renderer, float dt) {
 	center.x = avatarRect.w / 2;
 	center.y = avatarRect.h / 2;
 
-	//SDL_RenderCopy(renderer, _avatar, NULL, &r);
 	SDL_RenderCopyEx(renderer, _avatar, NULL, &avatarRect, _transform.rotation.z, &center, SDL_FLIP_NONE);
 
 	face.x = transformedEndPoint.x;
 	face.y = transformedEndPoint.y;
-
-
 }
 
 
 void Player::move(float dt, SDL_Keycode key) {
-/*	printf("X: %f, Y: %f\n", _transform.position.x, _transform.position.y);
-	printf("fX: %d, fY: %d\n", face.x, face.y);
-		printf("z%f\n", _transform.rotation.z);
-*/	int x = face.x - _transform.position.x;
+	int x = face.x - _transform.position.x;
 	int y = face.y - _transform.position.y;
-//	printf("x: %d, y: %d\n\n", x, y);
+
 	switch(key) {
 		case SDLK_LEFT: case SDLK_a:
 			_transform.rotation.z -= (rotationSpeed * dt);
-			printf("hello?");
 			break;
 		case SDLK_RIGHT: case SDLK_d:
 			_transform.rotation.z += (rotationSpeed * dt);

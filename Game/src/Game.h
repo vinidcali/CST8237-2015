@@ -11,6 +11,7 @@
 #include <SDL_image.h>
 #include "Player.h"
 #include "Wall.h"
+#include "Projectile.h"
 
 
 union SDL_Event;
@@ -74,6 +75,8 @@ protected:
 
 	Player *_player1, *_player2;
 	std::vector<Wall *> _walls;
+	Projectile *_proj1, *_proj2;
+
 	std::string _title;
 
 	b2World *_world;

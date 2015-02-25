@@ -49,9 +49,20 @@ public:
 	*/
 	~Player();
 
-
+	/**
+	 * \fn		void Player::move(float dt, SDL_Keycode key)
+	 * \brief	Algorithm that makes the players move forward based on the direction they're facing or sideways.
+	 * \param	dt			The time in fractions of a second since the last pass.
+	 * \param	key			The SDL key code representing the keyboard key being used.
+	 */
 	void move(float dt, SDL_Keycode key);
-
+	
+	/**
+	 * \fn		void Player::collision(float dt, SDL_Keycode key)
+	 * \brief	Algorithm that makes the players move backwards when they hit something in the game world.
+	 * \param	dt			The time in fractions of a second since the last pass.
+	 * \param	key			The coordinates representing the location where the collision happened.
+	 */
 	void collision(float dt, SDL_Rect intersc);
 
 

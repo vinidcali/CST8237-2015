@@ -46,6 +46,12 @@ void Game::InitializeImpl() {
 	}
   
 
+	_proj1 = new Projectile();
+	_objects.push_back(_proj1);
+
+	_proj2 = new Projectile();
+	_objects.push_back(_proj2);
+
 	for (auto itr = _objects.begin(); itr != _objects.end(); itr++)
 		(*itr)->Initialize(_renderer);
 
@@ -70,6 +76,8 @@ BOX STUFF, NOT COMPLETE
 //however, so far we dont have a visual representation to it yet, so we cant see anything
 */
 
+/*	
+MUSIC STUFF, IT WORKS!
 	Mix_Init(MIX_INIT_MP3);
 
 	int success = Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == 0;
@@ -82,7 +90,7 @@ BOX STUFF, NOT COMPLETE
 	_sfx = Mix_LoadWAV("./erased.wav");
 	if (_sfx != nullptr)
 		Mix_PlayChannel(-1, _sfx, 0);
-
+*/
 }
 
 void Game::UpdateImpl(float dt) {
@@ -100,12 +108,19 @@ void Game::UpdateImpl(float dt) {
 				_player1 -> move(dt, keyCode);
 				break;
 			case SDLK_SPACE:
+				_proj1 -> setOrigin(_player1->face.x, _player1->face.y);
+				_proj1 -> shoot(dt);
+			case SDLK_0:
+				_proj2 -> setOrigin(_player2->face.x, _player2->face.y);
+				_proj2 -> shoot(dt);
+/*			case SDLK_SPACE:
 				if (Mix_PausedMusic())
 					Mix_ResumeMusic();
 				else
 					Mix_PauseMusic();
 			case SDLK_r:
 				Mix_RewindMusic();
+*/
 			default:
 				break;
 		}
@@ -126,7 +141,14 @@ void Game::UpdateImpl(float dt) {
 			_player1->collision(dt, intersection);
 		else if (SDL_IntersectRect(&_player2->avatarRect, &(*itr)->wallRect, &intersection))
 			_player2->collision(dt, intersection);
-
+	if (SDL_IntersectRect(&_player1->avatarRect, &_proj2->avatarRect, &intersection)) {
+		_player2->points++;
+		_proj2->destroy();
+	}
+	if (SDL_IntersectRect(&_player2->avatarRect, &_proj1->avatarRect, &intersection)) {
+		_player1->points++;
+		_proj1->destroy();
+	}
 
 
 	std::stringstream tempTitle;
